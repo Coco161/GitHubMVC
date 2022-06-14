@@ -16,6 +16,7 @@ namespace GitHubMVC.Controllers
             _context = new ApplicationDbContext();
         }
         // GET: Gigs
+        [Authorize] // lock up the method
         public ActionResult Create()
         {
             var viewModel = new GigFormViewModel()
