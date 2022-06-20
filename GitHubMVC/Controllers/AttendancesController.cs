@@ -1,4 +1,5 @@
-﻿using GitHubMVC.Models;
+﻿using GitHubMVC.Dtos;
+using GitHubMVC.Models;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -20,11 +21,16 @@ namespace GitHubMVC.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Attend([FromBody] int gigId)
+        public IHttpActionResult Attend(AttendanceDto dto)
         {
+            var userId = User.Identity.GetUserId();
+            if (_context.Attendances.All(a => a.AttendeeId == userId && a.GigId == dto.GigId))
+            {
+                return BadRequest("The attendance already exists");
+            }
             var attendance = new Attendance()
             {
-                GigId = gigId,
+                GigId = dto.GigId,
                 AttendeeId = User.Identity.GetUserId()
             };
 
